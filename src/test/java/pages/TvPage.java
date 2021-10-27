@@ -3,6 +3,7 @@ package pages;
 import enumerators.By;
 import org.junit.Assert;
 import santtium.KeyEvent;
+import santtium.implement.KeyToPress;
 import santtium.interfaces.ICtrlWeb;
 import stepsDefinitions.Context;
 
@@ -23,17 +24,17 @@ public class TvPage {
     }
 
     public void pausePlayer() throws InterruptedException {
-        Context.santtium.keyPress(KeyEvent.Up);
-        Context.santtium.keyPress(KeyEvent.Enter);
+        Context.santtium.keyPress(new KeyToPress(KeyEvent.Up, "keyup"));
+        Context.santtium.keyPress(new KeyToPress(KeyEvent.Enter, "keyup"));
     }
 
     public void navegateByPage() throws InterruptedException, IOException {
-        Context.santtium.keyPress(KeyEvent.Down);
-        Context.santtium.keyPress(KeyEvent.Right);
-        Context.santtium.keyPress(KeyEvent.Right);
-        Context.santtium.keyPress(KeyEvent.Left);
-        Context.santtium.keyPress(KeyEvent.Up);
-        Context.santtium.keyPress(KeyEvent.Enter);
+        Context.santtium.keyPress(new KeyToPress(KeyEvent.Down, "keyup"));
+        Context.santtium.keyPress(new KeyToPress(KeyEvent.Right, "keyup"));
+        Context.santtium.keyPress(new KeyToPress(KeyEvent.Right, "keyup"));
+        Context.santtium.keyPress(new KeyToPress(KeyEvent.Left, "keyup"));
+        Context.santtium.keyPress(new KeyToPress(KeyEvent.Up, "keyup"));
+        Context.santtium.keyPress(new KeyToPress(KeyEvent.Enter, "keyup"));
 
         String img = Context.santtium.takeScreenShot(10);
         byte[] data = Base64.getDecoder().decode(img.split(",")[1].getBytes(StandardCharsets.UTF_8));
