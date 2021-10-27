@@ -1,0 +1,75 @@
+//import org.gradle.api.tasks.testing.logging.TestLogEvent
+
+plugins {
+    id 'java'
+    id 'se.thinkcode.cucumber-runner' version '0.0.8'
+}
+
+ext {
+    junitVersion = '5.8.1'
+    cucumberVersion = '7.0.0'
+}
+
+group 'com.santtium'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+
+    testImplementation "io.cucumber:cucumber-java:${cucumberVersion}"
+
+    testImplementation "io.cucumber:cucumber-junit:${cucumberVersion}"
+    testImplementation "org.junit.vintage:junit-vintage-engine:${junitVersion}"
+    //testImplementation group: 'io.cucumber', name: 'cucumber-picocontainer', version: '7.0.0'
+
+    testImplementation files('libs/SanttiumDriverJava.jar')
+}
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
+}
+
+task cucumberCli() {
+    dependsOn assemble, testClasses
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = [
+              '--plugin', 'pretty',
+              '--plugin', 'html:target/cucumber-report.html',
+              '--glue', 'stepsDefinitions',
+              '--tags', '@tv',
+              'src/test/resources']
+        }
+    }
+}
+
+cucumber {
+    main = 'io.cucumber.core.cli.Main'
+}
+
+test {
+    useJUnitPlatform()
+
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+    }
+
+    systemProperties(project.gradle.startParameter.systemPropertiesArgs)
+}
