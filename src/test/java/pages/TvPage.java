@@ -17,18 +17,18 @@ public class TvPage {
     public TvPage() {
     }
 
-    public void validateLabelHome(String label) throws InterruptedException {
+    public void validateLabelHome(String label) throws Exception {
         ICtrlWeb labelCtrl = Context.santtium.searchCtrlWeb(By.XPATH, "//*[contains(text(),'viendo')]");
         Assert.assertNotNull("No se encontro el label", labelCtrl);
         labelCtrl.flash();
     }
 
-    public void pausePlayer() throws InterruptedException {
+    public void pausePlayer() throws Exception {
         Context.santtium.keyPress(new KeyToPress(KeyEvent.Up, "keyup"));
         Context.santtium.keyPress(new KeyToPress(KeyEvent.Enter, "keyup"));
     }
 
-    public void navegateByPage() throws InterruptedException, IOException {
+    public void navegateByPage() throws Exception {
         Context.santtium.keyPress(new KeyToPress(KeyEvent.Down, "keyup"));
         Context.santtium.keyPress(new KeyToPress(KeyEvent.Right, "keyup"));
         Context.santtium.keyPress(new KeyToPress(KeyEvent.Right, "keyup"));
@@ -37,13 +37,16 @@ public class TvPage {
         Context.santtium.keyPress(new KeyToPress(KeyEvent.Enter, "keyup"));
 
         String img = Context.santtium.takeScreenShot(10);
+        /*
+        Example Screenshot
         byte[] data = Base64.getDecoder().decode(img.split(",")[1].getBytes(StandardCharsets.UTF_8));
-        OutputStream stream = new FileOutputStream("/Users/santty/Downloads/image.png");
+        OutputStream stream = new FileOutputStream("/YOUR PATH/image.png");
         stream.write(data);
 
         String imgRaw = Context.santtium.takeScreenShotRaw(10);
         byte[] dataRaw = Base64.getDecoder().decode(imgRaw.split(",")[1].getBytes(StandardCharsets.UTF_8));
-        OutputStream streamRaw = new FileOutputStream("/Users/santty/Downloads/imageRaw.png");
+        OutputStream streamRaw = new FileOutputStream("/YOUR PATH/imageRaw.png");
         streamRaw.write(dataRaw);
+        */
     }
 }

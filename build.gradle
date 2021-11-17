@@ -3,7 +3,7 @@
 plugins {
     id 'java'
     id 'se.thinkcode.cucumber-runner' version '0.0.8'
-    id 'io.freefair.lombok' version '6.2.0'
+    //id 'io.freefair.lombok' version '6.2.0'
 }
 
 ext {
@@ -27,6 +27,8 @@ java {
 }
 
 dependencies {
+    implementation 'org.projectlombok:lombok:1.16.20'
+
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
 
@@ -39,8 +41,9 @@ dependencies {
     testImplementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 
     //testImplementation group: 'io.cucumber', name: 'cucumber-picocontainer', version: '7.0.0'
-
+    testImplementation "org.slf4j:slf4j-simple:1.6.1"
     testImplementation files('libs/SanttiumDriverJava.jar')
+    testImplementation files('libs/SanttiumReportHelper.jar')
 }
 
 configurations {
@@ -77,4 +80,6 @@ test {
     }
 
     systemProperties(project.gradle.startParameter.systemPropertiesArgs)
+    systemProperty 'key_device', System.getProperty('key_device')
+    systemProperty "cucumber.filter.tags", System.getProperty("cucumber.filter.tags")
 }

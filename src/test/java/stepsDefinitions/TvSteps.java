@@ -15,19 +15,19 @@ public class TvSteps {
     }
 
     @Then("I navigate between the movies")
-    public void iNavigateBetweenTheMovies() throws InterruptedException, IOException {
+    public void iNavigateBetweenTheMovies() throws Exception {
         System.out.println("1");
         tvPage.navegateByPage();
     }
 
     @Given("I validate label {string}")
-    public void iValidateLabel(String label) throws InterruptedException {
+    public void iValidateLabel(String label) throws Exception {
         System.out.println("2");
         tvPage.validateLabelHome(label);
     }
 
     @When("I pause the player")
-    public void iPauseThePlayer() throws InterruptedException {
+    public void iPauseThePlayer() throws Exception {
         System.out.println("3");
         //int x = 1 / 0;
         tvPage.pausePlayer();

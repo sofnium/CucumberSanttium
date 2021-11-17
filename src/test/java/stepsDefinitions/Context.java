@@ -1,10 +1,10 @@
 package stepsDefinitions;
 
-import Common.ReportHelper;
 import io.cucumber.java.*;
 import io.cucumber.plugin.event.PickleStepTestStep;
 import io.cucumber.plugin.event.Result;
 import io.cucumber.plugin.event.Status;
+import santtium.helpers.ReportHelper;
 import santtium.implement.SanttiumProvider;
 import santtium.interfaces.Santtium;
 
@@ -18,10 +18,22 @@ public class Context {
     private static int _noStep;
     private List<PickleStepTestStep> testSteps;
     public static ReportHelper reportHelper;
+    //Data for API SANTTIUM
+
+    private static String username = "USERNAME";
+    private static String password = "PASSWORD";
+    private static String idProyect = "ID PROJECT";
+    private static String idTestPlan= "ID TEST PLAN";
+    private static String idDevice= "ID DEVICE";
+    private static String version= "1.0.0";
+    private static String apiKey= "API KEY";
+    //End Data
 
     @BeforeAll
     public static void init() throws Exception {
-        reportHelper = new ReportHelper();
+        reportHelper = new ReportHelper(idProyect,username,password,idTestPlan,idDevice,version);
+        //You can call Overloaded constructor for use an existing TestRun
+        //reportHelper = new ReportHelper(idProyect,username,password,"8abd1b96-173a-4d6e-473e-08d9a97dacce");
     }
 
     @Before
@@ -29,12 +41,12 @@ public class Context {
         System.out.println("primero");
         _noStep = 0;
         getListSteps(scenario);
-        santtium = SanttiumProvider.GetProvider("6RJ16", "360c1795-69d2-415d-ac61-f27cb9a8e3ce", 10);
+        santtium = SanttiumProvider.GetProvider(System.getProperty("key_device"), apiKey, 10);
         santtium.start();
     }
 
     @AfterStep
-    public void afterStep(Scenario scenario) throws NoSuchFieldException, IllegalAccessException, InterruptedException {
+    public void afterStep(Scenario scenario) throws Exception {
         if(_noStep == 0) {
             _noStep++;
             return;
@@ -49,7 +61,7 @@ public class Context {
             reportHelper.addSatus(0);
             _noStep++;
         }
-        String img = santtium.takeScreenShotRaw(10);
+        String img = step.contains("player page") ? santtium.takeScreenShot(50) : santtium.takeScreenShotRaw(50);
         reportHelper.addImg(img);
         reportHelper.addEvidenceToTestRun();
     }
@@ -70,7 +82,8 @@ public class Context {
     }
 
     @AfterAll
-    public static void finish() {
+    public static void finish() throws Exception {
+        santtium.stop();
         reportHelper.uploadResults();
     }
 
